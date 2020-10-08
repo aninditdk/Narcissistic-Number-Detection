@@ -1,0 +1,181 @@
+/*A Narcissistic number in a given number base b is a number that is the sum of its own digits each raised to the power of the number of digits. 
+So our main focus is to check if a given number for say 1634 by using assembly level language code in 8085 is narcissistic or not..
+So the operation will be 1^4+6^4+3^4+4^4=1634 */
+
+(1)	EXTRACTION
+2000                               3E		MVI A, LB OF NO.
+2002                               32		STA 2600H
+2005                               3E		MVI A, HB OF NO.
+2007                               32		STA 2601H
+200A                               11		LXI D, 4 DIGIT NO.
+200D                               0E		MVI C, FF
+200F                                0C		INR C
+2010                                DE		SBI 10H
+2012                                D2		JNC 200F
+2015                                C6		ADI 10H
+2017                                32		STA 2500H
+201A                                79		MOV A,C
+201B                                32		STA 2501H
+201E                                0E		MVI C, FF
+2020                                7B    MOV A,E
+2021                                0C    INR C
+2022                                DE    SBI 10H
+2024                                D2    JNC 2021
+2027                                C6    ADI 10H
+2029		                            32    STA 2502
+202C			                          79		MOV A,C
+202D			                          32		STA 2503
+
+
+(2)	Finding the 4TH  power of the 1ST  number
+2030                             26                        MVI H, 00H
+2032                             2E                        MVI L, 00H
+2034                             1E                        MVI E, 04H
+2036                             44                        MOV B,H
+2037                             3A                        LDA 2500
+203A                               4F                       MOV C,A
+203B                               57                       MOV D,A
+203C                               7D                       MOV A,L
+203D                               82                       ADD D
+203E                               D2                       JNC 2042
+2041                               04                       INR B
+2042                               0D                       DCR C
+2043                               C2                       JNZ 203D
+2046                               6F                       MOV L,A
+2047                               60                       MOV H,B
+2048                               1D                       DCR E
+2049                               C2                       JNZ 2036
+204C                               7D                       MOV A,L
+204D                               32                       STA 2504H
+2050                                7C                      MOV A,H
+2051                                32                      STA 2500H
+
+
+(3)	FINDING THE 4TH POWER OF SECOND NUMBER:
+2054                               26                       MVI H, 00H
+2056                               2E                       MVI L, 00H
+2058                               1E                       MVI E, 04 H
+205A                               44                       MOV B,H
+205B                               3A                       LDA 2501
+205E                               4F                       MOV C,A
+205F                               57                       MOV D,A
+2060                               7D                      MOV A,L
+2061                               8A                      ADD D
+2062                               D2                      JNC 206
+2065                               04                      INR B
+2066                               0D                      DCR C
+2067                               C2                      JNZ 2061
+206A                               6F                      MOV L,A
+206B                               6D                     MOV H,B
+206C                               1D                       DCR E
+206D                               C2                       JNZ 205A
+2070                               7D                       MOV A,L
+2071                               32                       STA 2506 H
+2074                               7C                       MOV A,H
+2075                               32                       STA 2507 H
+
+
+
+(4)	FINDING THE 4TH POWER OF third NUMBER:
+2078                               26                       MVI H, 00H
+207A                               2E                       MVI L, 00H
+207C                               1E                       MVI E, 04H
+207E                               44                       MOV B, H
+207F                               3A                       LDA 2502
+2082                               4F                       MOV C, A
+2083                               57                       MOV DA
+2084                               7D                       MOV A, L
+2085                               8A                       ADD D
+2086                               D2                       JNC 208A
+2089                               04                       INR B
+208A                               0D                      DCR C
+208B                               C2                      JNZ 2085
+208E                               6F                       MOV L, A
+208F                               6D                      MOV H, B
+2090                               1D                      DCR E
+2091                               C2                      JNZ 207E
+2094                               7D                      MOV A, L
+2095                               32                      STA 2508 H
+2098                               7C                      MOV A, H
+2099                               32                      STA 2509 H
+
+
+(5)	FINDING THE 4TH POWER OF FOURTH NUMBER:
+209C                               26                       MVI H, 00 H
+209E                               2E                       MVI L, 00H
+20A0                               1E                       MVI E,04 H
+20A2                               44                       MOV B, H
+20A3                               3A                       LDA 2503
+20A6                               4F                       MOV C, A
+20A7                               57                       MOV D, A
+20A8                               7D                       MOV A, L
+20A9                               8A                       ADD D
+20AA                               D2                       JNC 20AE
+20AD                               04                       INR B
+20AE                               0D                       DCR C
+20AF                               C2                       JNZ 20A9
+20B2                               6F                       MOV L, A
+20B3                               6D                       MOV H, B
+20B4                               1D                       DCR E
+20B5                               C2                       JNZ 20A2
+20B8                               7D                       MOV A, L
+20B9                               32                        STA 250A H
+20BA                               7C                       MOV A, H
+20BC                               32                       STA 250B H
+
+
+
+(6)	ADDITION 
+20BF                                2A                       LHLD 2504
+20C2                                EB                       XCHG
+20C3                                2A                       LHLD 2506
+20C6                                19                       DAD D
+20C7                                22                       SHLD 250C
+20CA                                2A                       LHLD 250C
+20CD                                EB                       XCHG
+20CE                                 2A                       LHLD 2508
+20C1                                 19                       DAD D
+20C2                                 22                       SHLD 250E
+20C5                                 0E	 MVI C, 00 H
+20C7                                 3A	 LDA 250E H
+20CA                                 47                       MOV B, A
+20CB                                 3A                       LDA 250A H
+2OCE                                 80                       ADD B
+20CF                                  27                       DAA
+20C0                                  32                       STA 2510
+20C3                                  3A                       LDA 250F H
+20C6                                  47                        MOV B, A
+20C8                                  3A                       LDA 250B H
+20CB                                  88                       ADC B
+20CC                                  27                       DAA
+20CD                                  32                       STA 2511
+20D0                                  D2	JNC 20D4
+20D3                                  0C                       INR C
+20D4                                  79                       MOV A, C
+20D5                                  32	   STA 2512 H
+
+
+
+(7)	COMPARISION:
+20D8                                 3A                       LDA 2600
+20DB                                 47                       MOV B,A
+20DC                                 3A                       LDA 2510
+20DF                                 90                       SUB B
+20E0                                  F6                       ORI 00H
+20E2                                  CA                       JZ 20E7
+20E5                                  0E                       MVI C,00
+20E7                                  3A                       LDA 2601
+20EA                                  47                       MOV B, A
+20EB                                  3A                       	LDA 2511
+20EE                                  90                        SUB B
+20EF                                  F6                       ORI 00H
+20F1                                  CA                       JZ 20F6
+20F4                                  0E                       MVI C,00H
+20F6                                  0E                       MVI C,01H
+20F8                                  EF                       RST 5
+
+
+
+
+
+
